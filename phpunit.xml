@@ -1,7 +1,11 @@
 <phpunit bootstrap="src/bootstrap.php" colors="true" verbose="true">
 	<testsuites>
-    	<testsuite name="money">
+    	<testsuite name="tests">
       		<directory>tests</directory>
+		</testsuite>
+		<testsuite name="abstract">
+			<file>tests\AbstractClassTest.php</file>
+			<file>tests\TraitClassTest.php</file>
 		</testsuite>
   	</testsuites>
 </phpunit>
