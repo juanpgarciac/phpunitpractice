@@ -26,4 +26,50 @@ final class SubjectTest extends TestCase
         // update() method with the string 'something'.
         $subject->doSomething();
     }
+    public function testErrorReported(): void
+    {
+        // Create a mock for the Observer class, mocking the
+        // reportError() method
+        $observer = $this->createMock(Observer::class);
+
+        $observer->expects($this->once())
+                 ->method('reportError')
+                 ->with(
+                       $this->greaterThan(0),
+                       $this->stringContains('Something'),
+                       $this->anything()
+                   );
+
+        $subject = new Subject('My subject');
+        $subject->attach($observer);
+
+        // The doSomethingBad() method should report an error to the observer
+        // via the reportError() method
+        $subject->doSomethingBad();
+    }
+    public function testErrorReported2(): void
+    {
+        // Create a mock for the Observer class, mocking the
+        // reportError() method
+        $observer = $this->createMock(Observer::class);
+
+        $observer->expects($this->once())
+                 ->method('reportError')
+                 ->with(
+                     $this->greaterThan(0),
+                     $this->stringContains('Something'),
+                     $this->callback(function($subject)
+                     {
+                         return is_callable([$subject, 'getName']) &&
+                                $subject->getName() == 'My subject';
+                     }
+                 ));
+
+        $subject = new Subject('My subject');
+        $subject->attach($observer);
+
+        // The doSomethingBad() method should report an error to the observer
+        // via the reportError() method
+        $subject->doSomethingBad();
+    }
 }
